@@ -8,25 +8,21 @@ app.use(express.static('public'));
 var server = http.Server(app);
 var io = socket_io(server);
 
+var user = 1;
+
 io.on('connection', function (socket) {
-    //socket.broadcast.emit('status', 'A new user has logged in'); to everyone but the sender
-    //io.sockets.emit('user_count', users); to all
+    
+    socket.emit('user', user);
+    
+    user++;
         
     socket.on('draw', function(draw) {
         socket.broadcast.emit('draw', draw);
     });
-    /*
-    socket.on('message', function(message) {
-        console.log('Received message:', message);
-        socket.broadcast.emit('message', message);
-        socket.emit('user_count', users);
-    });
     
-    socket.on('disconnect', function () {
-        users--;
-        socket.broadcast.emit('status', 'A user has logged out');
-        io.sockets.emit('user_count', users);
-    });*/
+    socket.on('guess', function(guess) {
+        socket.broadcast.emit('guess', guess);
+    });
  
 });
 
